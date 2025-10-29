@@ -6,7 +6,9 @@ import Container from "../shard/Container"
 const RootLayout = () => {
   return (
     <div>
-      <Navbar />
+      <header className="h-16">
+        <Navbar />
+      </header>
       <main className="min-h-[calc(100vh-284px)]">
         <Container>
           <Outlet />

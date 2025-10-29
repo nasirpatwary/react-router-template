@@ -1,84 +1,91 @@
+import { Link, NavLink, useLocation } from "react-router";
 import Container from "../shard/Container";
-
+import ButtonComponent from "../shard/ButtonComponent";
+import { useEffect, useState } from "react";
+import { Menu, MoveRight, X } from "lucide-react";
 const Navbar = () => {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const links = (
+    <>
+      <NavLink to="/">Home</NavLink>
+      <NavLink to="/services">Services</NavLink>
+      <NavLink to="/pricing">Pricing</NavLink>
+    </>
+  );
+  useEffect(() => {
+    if (open) setOpen(false);
+  }, [location.pathname]);
   return (
-    <nav className="bg-base-100 shadow-sm">
-      <Container>
-      <div className="navbar p-0">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                {" "}
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />{" "}
-              </svg>
-            </div>
-            <ul
-              tabIndex={0}
-              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow"
-            >
-              <li>
-                <a>Item 1</a>
-              </li>
-              <li>
-                <a>Parent</a>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </li>
-              <li>
-                <a>Item 3</a>
-              </li>
+    <nav className="shadow fixed w-full bg-white/30 backdrop-blur-sm z-50">
+      <Container className="navbar justify-between">
+        <Link to="/" className="flex">
+          <img
+            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+            alt=""
+            className="h-8 w-auto"
+          />
+        </Link>
+        <div>
+          <div className="hidden lg:flex gap-6 items-center">
+            <ul className="gap-6 font-jost text-gray-700 font-medium menu-horizontal">
+              {links}
             </ul>
+            <ButtonComponent to="/" className="btn-sm bg-[#4F0FD1] text-white">
+              Get Start
+            </ButtonComponent>
           </div>
-          <a className="btn btn-ghost text-xl">daisyUI</a>
+          {/* Mobile Menu */}
+          <div className="lg:hidden">
+            {open ? (
+              <X
+                size={22}
+                onClick={() => setOpen(false)}
+                className="cursor-pointer"
+              />
+            ) : (
+              <Menu
+                size={22}
+                onClick={() => setOpen(true)}
+                className="cursor-pointer"
+              />
+            )}
+
+            {/* Mobile Drawer */}
+            <div
+              className={`fixed top-16 right-0 w-full md:w-1/3 h-screen bg-base-200 shadow-lg transition-transform duration-500 ease-in-out transform ${
+                open ? "translate-x-0" : "translate-x-[100%]"
+              }`}
+            >
+              <ul className="menu space-y-4 font-jost font-medium p-4">
+                {links}
+                <div className="group">
+                  <ButtonComponent
+                    to="/"
+                    className="btn-sm bg-[#4F0FD1] text-white"
+                  >
+                    Get Started
+                    <MoveRight
+                      size={16}
+                      className="translate-x-0 group-hover:translate-x-2 duration-500"
+                    />
+                  </ButtonComponent>
+                </div>
+              </ul>
+            </div>
+
+            {/* Background Overlay */}
+            {open && (
+              <div
+                onClick={() => setOpen(false)}
+                className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity duration-300"
+              ></div>
+            )}
+          </div>
         </div>
-        <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            <li>
-              <a>Item 1</a>
-            </li>
-            <li>
-              <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                  <li>
-                    <a>Submenu 1</a>
-                  </li>
-                  <li>
-                    <a>Submenu 2</a>
-                  </li>
-                </ul>
-              </details>
-            </li>
-            <li>
-              <a>Item 3</a>
-            </li>
-          </ul>
-        </div>
-        <div className="navbar-end">
-          <a className="btn">Button</a>
-        </div>
-      </div>
       </Container>
     </nav>
   );
-}
+};
 
-export default Navbar
+export default Navbar;
